@@ -1,16 +1,16 @@
 // Import all API services
-import * as StripePayments from './stripe/payments.js';
-import * as StripeProducts from './stripe/products.js';
-import * as StripeWebhook from './stripe/webhook.js';
+import * as StripePayments from './stripe/payments';
+import * as StripeProducts from './stripe/products';
+import * as StripeWebhook from './stripe/webhook';
 
-import * as SupabaseCampaigns from './supabase/campaigns.js';
-import * as SupabaseProducts from './supabase/products.js';
-import * as SupabaseUsers from './supabase/users.js';
-import * as SupabaseDonations from './supabase/donations.js';
+import * as SupabaseCampaigns from './supabase/campaigns';
+import * as SupabaseProducts from './supabase/products';
+import * as SupabaseUsers from './supabase/users';
+import * as SupabaseDonations from './supabase/donations';
 
 // Re-export all API services
-export * from './stripe/index.js';
-export * from './supabase/index.js';
+export * from './stripe/index';
+export * from './supabase/index';
 
 // Export a unified API object with proper ES module imports
 export const API = {

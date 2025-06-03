@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { SupabaseProductsService, Product as SupabaseProduct } from '../api/supabase/products.js';
+import { SupabaseProductsService, Product as SupabaseProduct } from '../api/supabase/products';
 import { persist } from 'zustand/middleware';
 
 export interface Product {

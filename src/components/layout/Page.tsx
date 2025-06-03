@@ -1,5 +1,5 @@
 import React, { ReactNode } from 'react';
-import Container from './Container.js';
+import Container from './Container';
 
 interface PageProps {
   children: ReactNode;

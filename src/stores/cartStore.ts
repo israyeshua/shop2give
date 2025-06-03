@@ -1,9 +1,9 @@
 import { create } from 'zustand';
-import { CartItem, Product } from '../types/index.js';
+import { CartItem, Product } from '../types/index';
 
 interface CartState {
   items: CartItem[];
-  addToCart: (product: Product, quantity: number) => void;
+  addToCart: (product: any, quantity: number) => void;
   removeFromCart: (productId: string) => void;
   updateQuantity: (productId: string, quantity: number) => void;
   setProductCampaign: (productId: string, campaignId: string) => void;
@@ -15,25 +15,41 @@ interface CartState {
 export const useCartStore = create<CartState>((set, get) => ({
   items: [],
   
-  addToCart: (product, quantity = 1) => set((state) => {
-    // Check if item already exists in cart
-    const existingItemIndex = state.items.findIndex(item => item.product.id === product.id);
+  addToCart: (productInput: any, quantity: number) => {
+    // Convert any product to the expected Product type
+    const product: Product = {
+      id: productInput.id,
+      name: productInput.name || productInput.title || 'Product',
+      description: productInput.description || 'Product description',
+      price: productInput.price,
+      imageUrl: productInput.imageUrl,
+      category: productInput.category || 'general',
+      priceId: productInput.priceId || productInput.stripePriceId || 'price_default',
+      campaignId: productInput.campaignId,
+      stripeProductId: productInput.stripeProductId,
+      stripePriceId: productInput.stripePriceId,
+    };
     
-    if (existingItemIndex !== -1) {
-      // Update quantity of existing item
-      const updatedItems = [...state.items];
-      updatedItems[existingItemIndex].quantity += quantity;
-      return { items: updatedItems };
-    } else {
-      // Add new item
-      const newItem: CartItem = {
-        id: `cart-${product.id}-${Date.now()}`,
-        product,
-        quantity
-      };
-      return { items: [...state.items, newItem] };
-    }
-  }),
+    set((state) => {
+      const existingItem = state.items.find(
+        (item) => item.product.id === product.id
+      );
+
+      if (existingItem) {
+        return {
+          items: state.items.map((item) =>
+            item.id === existingItem.id
+              ? { ...item, quantity: item.quantity + quantity }
+              : item
+          ),
+        };
+      } else {
+        return {
+          items: [...state.items, { id: `${product.id}-${Date.now()}`, product, quantity }],
+        };
+      }
+    });
+  },
   
   removeFromCart: (productId) => set((state) => ({
     items: state.items.filter(item => item.product.id !== productId)

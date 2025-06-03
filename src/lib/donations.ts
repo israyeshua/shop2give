@@ -1,6 +1,6 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { SupabaseDonationsService, CampaignStatistics } from '../api/supabase/donations.js';
+import { SupabaseDonationsService, CampaignStatistics } from '../api/supabase/donations';
 
 export interface Donation {
   id: string;

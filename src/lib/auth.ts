@@ -1,5 +1,5 @@
 import { create } from 'zustand';
-import { supabase } from './supabase.js';
+import { supabase } from './supabase';
 import type { User } from '@supabase/supabase-js';
 
 type AuthState = {

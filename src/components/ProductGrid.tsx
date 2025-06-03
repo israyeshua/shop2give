@@ -1,13 +1,14 @@
-import React from 'react';
+
 import { ProductCard } from './ProductCard';
 import { Product } from '../data/products';
 
 type ProductGridProps = {
   products: Product[];
   title?: string;
+  campaignId?: string;
 };
 
-export function ProductGrid({ products, title }: ProductGridProps) {
+export function ProductGrid({ products, title, campaignId }: ProductGridProps) {
   if (products.length === 0) {
     return null;
   }
@@ -19,7 +20,7 @@ export function ProductGrid({ products, title }: ProductGridProps) {
       </h2>
       <div className="grid grid-cols-1 gap-6 sm:grid-cols-2 lg:grid-cols-4">
         {products.map((product) => (
-          <ProductCard key={product.id} product={product} />
+          <ProductCard key={product.id} product={product} campaignId={campaignId || product.campaignId} />
         ))}
       </div>
     </section>

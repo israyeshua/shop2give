@@ -1,5 +1,5 @@
 import { loadStripe, Stripe } from '@stripe/stripe-js';
-import { supabase } from '../../lib/supabase.js';
+import { supabase } from '../../lib/supabase';
 
 // Initialize environment variables
 const stripePublishableKey = import.meta.env.VITE_STRIPE_PUBLISHABLE_KEY;

@@ -1,12 +1,12 @@
 import { useState } from 'react';
 import { Link } from 'react-router-dom';
-import { Header } from '../components/Header.js';
-import { Footer } from '../components/Footer.js';
-import { Button } from '../components/ui/Button.js';
-import { formatCurrency } from '../lib/utils.js';
-import { StripeService } from '../api/stripe/payments.js';
-import { useCartStore } from '../stores/cartStore.js';
-import CartItem from '../components/cart/CartItem.js';
+import { Header } from '../components/Header';
+import { Footer } from '../components/Footer';
+import { Button } from '../components/ui/Button';
+import { formatCurrency } from '../lib/utils';
+import { StripeService } from '../api/stripe/payments';
+import { useCartStore } from '../stores/cartStore';
+import CartItem from '../components/cart/CartItem';
 
 export function CartPage() {
   const { items, getTotalPrice } = useCartStore();

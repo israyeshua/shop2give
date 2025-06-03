@@ -1,9 +1,9 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { useAuth } from './auth.js';
-import { CampaignDonation, CampaignStatistics } from './types.js';
-import { SupabaseCampaignsService, Campaign as APICampaign } from '../api/supabase/campaigns.js';
-import { SupabaseDonationsService } from '../api/supabase/donations.js';
+import { useAuth } from './auth';
+import { CampaignDonation, CampaignStatistics } from './types';
+import { SupabaseCampaignsService, Campaign as APICampaign } from '../api/supabase/campaigns';
+import { SupabaseDonationsService } from '../api/supabase/donations';
 
 export interface Campaign {
   id: string;

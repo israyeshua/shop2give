@@ -1,9 +1,9 @@
 import React, { useState, useEffect } from 'react';
 import { ShoppingCart, Heart, Share2, ArrowLeft } from 'lucide-react';
 import { Link } from 'react-router-dom';
-import { Product, DonationCampaign } from '../../types/index.js';
-import { useCartStore } from '../../stores/cartStore.js';
-import { useCampaignStore } from '../../stores/campaignStore.js';
+import { Product, DonationCampaign } from '../../types/index';
+import { useCartStore } from '../../stores/cartStore';
+import { useCampaignStore } from '../../stores/campaignStore';
 
 interface ProductDetailProps {
   product: Product;
@@ -108,15 +108,12 @@ const ProductDetail = ({ product }: ProductDetailProps): React.ReactNode => {
       }, 100);
       
       console.log('Product successfully added to cart');
-      
-      // Show feedback to the user
-      alert('Product added to cart');
+    
       
       // Optionally navigate to cart
       // navigate('/cart');
     } catch (error) {
       console.error('Error adding product to cart:', error);
-      alert('Failed to add product to cart. Please try again.');
     }
   };
   

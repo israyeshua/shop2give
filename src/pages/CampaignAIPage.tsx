@@ -1,9 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
-import { CreateCampaignChat } from '../components/campaign/CreateCampaignChat';
+import { CreateCampaignChat } from '../components/Campaign/CreateCampaignChat';
+import { CategorySuggestion } from '../components/Campaign/CategorySuggestion';
 import { useAuth } from '../lib/auth';
+import { type CategorySuggestion as CategorySuggestionType } from '../lib/categoryDetection';
 
 type CampaignData = {
   title: string;
@@ -22,6 +24,7 @@ export function CampaignAIPage() {
     goalAmount: 0,
     category: '',
   });
+  const [categorySuggestion, setCategorySuggestion] = useState<CategorySuggestionType | null>(null);
 
   useEffect(() => {
     if (!user) {
@@ -33,13 +36,42 @@ export function CampaignAIPage() {
     setCampaignData(prev => ({ ...prev, ...data }));
   };
 
+  const handleCategoryDetected = (category: string) => {
+    if (categorySuggestion && categorySuggestion.category === category) {
+      // If we already have this category suggestion, don't override it
+      return;
+    }
+    // Temporary placeholder - in a real implementation, you'd get the full suggestion object
+    setCategorySuggestion({
+      category: category as any,
+      confidence: 85,
+      keywords: []
+    });
+  };
+
+  const handleAcceptCategory = (category: string) => {
+    setCampaignData(prev => ({ ...prev, category }));
+    setCategorySuggestion(null);
+  };
+
   return (
     <div className="min-h-screen bg-gray-50">
       <Header />
       <main className="container mx-auto px-4 py-8">
         <div className="grid gap-8 lg:grid-cols-2">
           <div>
-            <CreateCampaignChat onUpdateForm={handleChatUpdate} />
+            <CreateCampaignChat 
+              onUpdateForm={handleChatUpdate} 
+              onCategoryDetected={handleCategoryDetected}
+            />
+            {categorySuggestion && (
+              <div className="mt-4">
+                <CategorySuggestion 
+                  suggestion={categorySuggestion} 
+                  onAccept={handleAcceptCategory} 
+                />
+              </div>
+            )}
           </div>
           <div className="rounded-lg bg-white p-6 shadow-sm">
             <h2 className="mb-4 text-xl font-bold text-gray-900">Campaign Preview</h2>

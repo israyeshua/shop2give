@@ -1,4 +1,4 @@
-import { supabase } from '../../lib/supabase.js';
+import { supabase } from '../../lib/supabase';
 import { User } from '@supabase/supabase-js';
 
 export interface Profile {

@@ -6,12 +6,29 @@ import { Badge } from './ui/Badge';
 import { formatCurrency } from '../lib/utils';
 import { useCartStore } from '../stores/cartStore';
 
-export function ProductCard({ product }) {
+type ProductCardProps = {
+  product: {
+    id: string;
+    title?: string;
+    name?: string;
+    price: number;
+    imageUrl: string;
+    badge?: 'SALE' | 'NEW' | 'LIMITED';
+    campaignId?: string;
+  };
+  campaignId?: string;
+};
+
+export function ProductCard({ product, campaignId }: ProductCardProps) {
   const { addToCart } = useCartStore();
 
   const handleAddToCart = (e: React.MouseEvent) => {
     e.preventDefault(); // Prevent navigation when clicking the button
-    addToCart(product, 1);
+    // If campaignId is provided as a prop, use that, otherwise use product's campaignId if available
+    const productWithCampaign = campaignId ? { ...product, campaignId } : product;
+    
+    // Pass product with campaign ID to cart store
+    addToCart(productWithCampaign, 1);
   };
 
   return (
@@ -36,7 +53,7 @@ export function ProductCard({ product }) {
         </div>
         <div className="p-6 bg-brand-pink bg-opacity-30">
           <h3 className="font-serif text-lg font-semibold text-brand-charcoal mb-2">
-            {product.title}
+            {product.title || product.name}
           </h3>
           <p className="text-xl font-bold text-brand-charcoal mb-4">
             {formatCurrency(product.price)}

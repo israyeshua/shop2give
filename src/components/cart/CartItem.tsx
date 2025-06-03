@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
-import { useCartStore } from '../../stores/cartStore.js';
-import { useCampaignStore } from '../../stores/campaignStore.js';
-import { CartItem as CartItemType, DonationCampaign } from '../../types/index.js';
+import { useCartStore } from '../../stores/cartStore';
+import { useCampaignStore } from '../../stores/campaignStore';
+import { CartItem as CartItemType, DonationCampaign } from '../../types/index';
 
 // Import icons - you might need to install these packages first
 // npm install lucide-react

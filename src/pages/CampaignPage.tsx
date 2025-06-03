@@ -1,4 +1,4 @@
-import React from 'react';
+
 import { useParams, Navigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
@@ -15,8 +15,8 @@ function getRandomProducts(count: number, excludeIds: string[] = []) {
 }
 
 export function CampaignPage() {
-  const { identifier } = useParams();
-  const campaign = campaigns.find(c => c.id === identifier || c.slug === identifier);
+  const { slug } = useParams();
+  const campaign = campaigns.find(c => c.id === slug || c.slug === slug);
 
   if (!campaign) {
     return <Navigate to="/" replace />;
@@ -70,6 +70,7 @@ export function CampaignPage() {
               <ProductGrid 
                 products={displayProducts} 
                 title={campaignProducts.length === 0 ? "Featured Products" : undefined}
+                campaignId={campaign.id}
               />
             </div>
 
