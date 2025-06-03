@@ -14,8 +14,24 @@ type CampaignFormData = {
   end_date?: string;
 };
 
-export function CampaignForm() {
-  const { register, handleSubmit, formState: { errors } } = useForm<CampaignFormData>();
+interface CampaignFormProps {
+  initialData?: {
+    title: string;
+    description: string;
+    goalAmount: number;
+    category: string;
+  };
+}
+
+export function CampaignForm({ initialData }: CampaignFormProps = {}) {
+  const { register, handleSubmit, formState: { errors } } = useForm<CampaignFormData>({
+    defaultValues: initialData ? {
+      title: initialData.title,
+      description: initialData.description,
+      goal_amount: initialData.goalAmount,
+      start_date: new Date().toISOString().split('T')[0],
+    } : undefined
+  });
   const { createCampaign } = useCampaigns();
   const [mainImage, setMainImage] = React.useState<File | null>(null);
   const [description, setDescription] = React.useState('');

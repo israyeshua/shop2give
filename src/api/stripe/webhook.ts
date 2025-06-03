@@ -2,7 +2,7 @@
  * Stripe webhook handler to process events from Stripe
  */
 
-import { SupabaseDonationsService } from '../supabase/donations.js';
+import { SupabaseDonationsService } from '../supabase/donations';
 
 interface StripeWebhookPayload {
   id: string;

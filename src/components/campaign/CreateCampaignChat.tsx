@@ -95,12 +95,6 @@ export function CreateCampaignChat({ onUpdateForm, onCategoryDetected }: CreateC
     setCurrentInput('');
     setImagePreview(null);
 
-    // Detect category from user input
-    const suggestion = detectCategory(currentInput);
-    if (suggestion && onCategoryDetected) {
-      onCategoryDetected(suggestion.category);
-    }
-
     // Update form data based on current question
     const formUpdate: any = {};
     switch (currentQuestion) {
@@ -118,14 +112,33 @@ export function CreateCampaignChat({ onUpdateForm, onCategoryDetected }: CreateC
         break;
     }
     onUpdateForm(formUpdate);
-
-    // Get AI response
-    const aiResponse = getAIResponse(currentInput, currentQuestion, suggestion?.category || null);
     
-    // Move to next question
-    if (currentQuestion < questions.length - 1) {
-      setCurrentQuestion(prev => prev + 1);
-      await addAIMessage(aiResponse);
+    // Detect category from user input
+    try {
+      const suggestion = await detectCategory(currentInput);
+      if (suggestion && onCategoryDetected) {
+        onCategoryDetected(suggestion.category);
+      }
+      
+      // Get AI response based on detected category
+      const aiResponse = getAIResponse(currentInput, currentQuestion, suggestion?.category || null);
+      
+      // Move to next question
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+        await addAIMessage(aiResponse);
+      }
+    } catch (error) {
+      console.error('Error detecting category:', error);
+      
+      // Fallback if category detection fails
+      const aiResponse = getAIResponse(currentInput, currentQuestion, null);
+      
+      // Move to next question
+      if (currentQuestion < questions.length - 1) {
+        setCurrentQuestion(prev => prev + 1);
+        await addAIMessage(aiResponse);
+      }
     }
   };
 

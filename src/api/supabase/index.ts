@@ -1,8 +1,8 @@
 // Export all Supabase API services
-export * from './campaigns.js';
-export * from './products.js';
-export * from './users.js';
-export * from './donations.js';
+export * from './campaigns';
+export * from './products';
+export * from './users';
+export * from './donations';
 
 // Re-export the Supabase client
-export { supabase } from '../../lib/supabase.js';
+export { supabase } from '../../lib/supabase';

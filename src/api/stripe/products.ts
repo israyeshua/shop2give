@@ -1,4 +1,4 @@
-import { DonationTarief, PriceOption, Product } from '../../lib/types.js';
+import { DonationTarief, PriceOption, Product } from '../../lib/types';
 import { createClient } from '@supabase/supabase-js';
 
 // Initialize Supabase client

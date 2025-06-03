@@ -119,8 +119,16 @@ coverage.json
 .parcel-cache
 
 # tests
+e2e/
+e2e/*
 tests/*
 __tests__/*
 __mocks__/*
 e2e-tests
 e2e-tests/*
+
+# local development
+docker-compose.yml
+.env.local.example
+supabase/scripts/setup-local-supabase.sh
+SUPABASE-LOCAL.md

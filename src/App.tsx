@@ -98,7 +98,7 @@ function App() {
             </Suspense>
           </ErrorBoundary>
         } />
-        <Route path="/campaign/:slug" element={
+        <Route path="/campaigns/:slug" element={
           <ErrorBoundary>
             <Suspense fallback={<PageLoader />}>
               <CampaignPage />
@@ -135,7 +135,7 @@ function App() {
             </Suspense>
           </ErrorBoundary>
         } />
-        <Route path="/product/:id" element={
+        <Route path="/products/:id" element={
           <ErrorBoundary>
             <Suspense fallback={<PageLoader />}>
               <ProductPage />

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { ShoppingCart, Search, Menu, X, ChevronDown } from 'lucide-react';
+import { ShoppingCart, Search, Menu, X } from 'lucide-react';
 import { Logo } from './Logo';
 import { Button } from './ui/Button';
 import { useCartStore } from '../stores/cartStore';
@@ -11,7 +11,6 @@ export function Header() {
   const itemCount = items.length;
   const navigate = useNavigate();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  const [categoriesOpen, setCategoriesOpen] = useState(false);
   
   const toggleMobileMenu = () => {
     setMobileMenuOpen(!mobileMenuOpen);
@@ -31,38 +30,9 @@ export function Header() {
             Campaigns
           </Link>
           
-          <div 
-            className="relative"
-            onMouseEnter={() => setCategoriesOpen(true)}
-            onMouseLeave={() => setCategoriesOpen(false)}
-          >
-            <button 
-              className="nav-link flex items-center gap-1"
-              onClick={() => setCategoriesOpen(!categoriesOpen)}
-            >
-              Categories
-              <ChevronDown className={`h-4 w-4 transition-transform ${categoriesOpen ? 'rotate-180' : ''}`} />
-            </button>
-            
-            {categoriesOpen && (
-              <div className="absolute left-0 top-full mt-1 w-64 rounded-lg bg-white py-2 shadow-lg">
-                {categories.map((category) => {
-                  const Icon = category.icon;
-                  return (
-                    <Link
-                      key={category.id}
-                      to={`/category/${category.slug}`}
-                      className="flex items-center gap-2 px-4 py-2 text-gray-700 hover:bg-gray-50"
-                      onClick={() => setCategoriesOpen(false)}
-                    >
-                      <Icon className="h-4 w-4" />
-                      {category.name}
-                    </Link>
-                  );
-                })}
-              </div>
-            )}
-          </div>
+          <Link to="/categories" className="nav-link">
+            Categories
+          </Link>
           
           <Link to="/products" className="nav-link">
             Products

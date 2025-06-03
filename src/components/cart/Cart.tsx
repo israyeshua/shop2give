@@ -1,8 +1,8 @@
 import React from 'react';
-import { useCartStore } from '../../stores/cartStore.js';
-import CartItem from './CartItem.js';
+import { useCartStore } from '../../stores/cartStore';
+import CartItem from './CartItem';
 import { useNavigate } from 'react-router-dom';
-import { createCheckoutSession } from '../../api/stripe/payments.js';
+import { createCheckoutSession } from '../../api/stripe/payments';
 
 const Cart: React.FC = () => {
   const { items, getTotalItems, getTotalPrice, clearCart } = useCartStore();

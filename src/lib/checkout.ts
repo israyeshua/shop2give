@@ -1,7 +1,7 @@
 import { create } from 'zustand';
 import { persist } from 'zustand/middleware';
-import { StripeService } from '../api/stripe/payments.js';
-import { Product } from './products.js';
+import { StripeService } from '../api/stripe/payments';
+import { Product } from './products';
 
 // Make sure we have the right console logging for debugging
 console.log('Checkout store initializing');

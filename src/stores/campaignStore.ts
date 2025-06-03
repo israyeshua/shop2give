@@ -1,6 +1,6 @@
 import { create } from 'zustand';
-import { DonationCampaign } from '../types/index.js';
-import { campaigns as dataCampaigns } from '../data/campaigns.js';
+import { DonationCampaign } from '../types/index';
+import { campaigns as dataCampaigns } from '../data/campaigns';
 
 interface CampaignState {
   campaigns: DonationCampaign[];

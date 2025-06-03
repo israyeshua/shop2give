@@ -1,4 +1,17 @@
-import natural from 'natural';
+import { supabase } from './supabase';
+
+// Simple browser-compatible tokenizer instead of using 'natural' library
+// Used as fallback if edge function is not available
+class SimpleTokenizer {
+  tokenize(text: string): string[] {
+    // Remove punctuation and split by whitespace
+    return text
+      .toLowerCase()
+      .replace(/[^\w\s]/g, '')
+      .split(/\s+/)
+      .filter(token => token.length > 0);
+  }
+}
 
 export type Category = 'medical' | 'education' | 'mission' | 'community' | 'emergency';
 
@@ -20,11 +33,35 @@ export interface CategorySuggestion {
   keywords: string[];
 }
 
-export function detectCategory(text: string): CategorySuggestion | null {
+export async function detectCategory(text: string): Promise<CategorySuggestion | null> {
+  if (!text) return null;
+  
+  // Try to use the edge function first
+  try {
+    const { data, error } = await supabase.functions.invoke('category-detection', {
+      body: { text }
+    });
+    
+    if (error) {
+      console.error('Edge function error:', error);
+      // Fall back to local processing
+      return detectCategoryLocal(text);
+    }
+    
+    return data;
+  } catch (err) {
+    console.error('Failed to use edge function:', err);
+    // Fall back to local processing
+    return detectCategoryLocal(text);
+  }
+}
+
+// Local fallback implementation
+export function detectCategoryLocal(text: string): CategorySuggestion | null {
   if (!text) return null;
 
-  const tokenizer = new natural.WordTokenizer();
-  const tokens = tokenizer.tokenize(text.toLowerCase()) || [];
+  const tokenizer = new SimpleTokenizer();
+  const tokens = tokenizer.tokenize(text) || [];
   
   let maxMatches = 0;
   let suggestedCategory: Category | null = null;
