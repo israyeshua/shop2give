@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
 import { CreateCampaignChat } from '../components/campaign/CreateCampaignChat';
-import { CampaignForm } from '../components/campaign/CampaignForm';
+import { CampaignForm } from '../components/Campaign/CampaignForm';
 import { useAuth } from '../lib/auth';
 
 export function CreateCampaignPage() {
