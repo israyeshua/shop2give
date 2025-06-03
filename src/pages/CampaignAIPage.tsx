@@ -2,8 +2,8 @@ import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { Header } from '../components/Header';
 import { Footer } from '../components/Footer';
-import { CreateCampaignChat } from '../components/Campaign/CreateCampaignChat';
-import { CategorySuggestion } from '../components/Campaign/CategorySuggestion';
+import { CreateCampaignChat } from '../components/campaign/CreateCampaignChat';
+import { CategorySuggestion } from '../components/campaign/CategorySuggestion';
 import { useAuth } from '../lib/auth';
 import { type CategorySuggestion as CategorySuggestionType } from '../lib/categoryDetection';
 
