@@ -1,4 +1,3 @@
-```typescript
 import { create } from 'zustand';
 import { supabase } from '../supabase';
 
@@ -101,7 +100,7 @@ export const useProduct = create<ProductStore>((set, get) => ({
       set({ isLoading: true, error: null });
       
       const fileExt = file.name.split('.').pop();
-      const filePath = `${productId}/${Date.now()}.${fileExt}`;
+      const filePath = \`${productId}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from('product-images')
@@ -137,4 +136,3 @@ export const useProduct = create<ProductStore>((set, get) => ({
     }
   },
 }));
-```

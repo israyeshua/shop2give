@@ -1,4 +1,3 @@
-```typescript
 import { create } from 'zustand';
 import { supabase } from '../supabase';
 import { useAuth } from '../auth';
@@ -77,7 +76,7 @@ export const useCreator = create<CreatorStore>((set, get) => ({
       set({ isLoading: true, error: null });
       
       const fileExt = file.name.split('.').pop();
-      const filePath = `${user.id}/${Date.now()}.${fileExt}`;
+      const filePath = \`${user.id}/${Date.now()}.${fileExt}`;
 
       const { error: uploadError } = await supabase.storage
         .from('creator-profiles')
@@ -98,4 +97,3 @@ export const useCreator = create<CreatorStore>((set, get) => ({
     }
   },
 }));
-```

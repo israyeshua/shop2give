@@ -1,4 +1,3 @@
-```typescript
 import React, { useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { useAuth } from '../../lib/auth';
@@ -76,4 +75,3 @@ export function CreatorDashboard() {
     </div>
   );
 }
-```

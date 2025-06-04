@@ -1,4 +1,3 @@
-```typescript
 import React from 'react';
 import { useProduct } from '../../lib/stores/product';
 import { Switch } from '@headlessui/react';
@@ -68,12 +67,12 @@ export function ProductList({ products }: ProductListProps) {
             <Switch
               checked={product.is_active}
               onChange={() => toggleProductStatus(product.id)}
-              className={`${
+              className={\`${
                 product.is_active ? 'bg-brand-teal' : 'bg-gray-200'
               } relative inline-flex h-6 w-11 items-center rounded-full transition-colors focus:outline-none focus:ring-2 focus:ring-brand-teal focus:ring-offset-2`}
             >
               <span
-                className={`${
+                className={\`${
                   product.is_active ? 'translate-x-6' : 'translate-x-1'
                 } inline-block h-4 w-4 transform rounded-full bg-white transition-transform`}
               />
@@ -90,4 +89,3 @@ export function ProductList({ products }: ProductListProps) {
     </div>
   );
 }
-```
