@@ -2,52 +2,46 @@ import { create } from 'zustand';
 import { supabase } from './supabase';
 import type { User } from '@supabase/supabase-js';
 
+type UserRole = 'creator' | 'cause' | 'customer' | 'admin';
+
+interface Profile {
+  role: UserRole;
+  profile_data: Record<string, any>;
+  stripe_account_id?: string;
+}
+
 type AuthState = {
   user: User | null;
-  roles: string[];
-  profile: {
-    full_name: string | null;
-    avatar_url: string | null;
-    bio: string | null;
-  } | null;
+  profile: Profile | null;
   isLoading: boolean;
+  error: string | null;
   initialize: () => Promise<void>;
   signIn: (email: string, password: string) => Promise<void>;
-  signUp: (email: string, password: string) => Promise<void>;
+  signUp: (email: string, password: string, role: UserRole) => Promise<void>;
   signOut: () => Promise<void>;
-  updateProfile: (data: Partial<AuthState['profile']>) => Promise<void>;
+  updateProfile: (data: Partial<Profile>) => Promise<void>;
 };
 
 export const useAuth = create<AuthState>((set, get) => ({
   user: null,
-  roles: [],
   profile: null,
-  isLoading: false,
+  isLoading: true,
+  error: null,
 
   initialize: async () => {
     try {
       const { data: { user } } = await supabase.auth.getUser();
       
       if (user) {
-        const { data: roles } = await supabase
-          .from('user_roles')
-          .select('role')
-          .eq('user_id', user.id);
-
         const { data: profile } = await supabase
-          .from('profiles')
+          .from('user_profiles')
           .select('*')
           .eq('id', user.id)
           .single();
 
-        set({ 
-          user,
-          roles: roles?.map(r => r.role) || [],
-          profile: profile || null,
-          isLoading: false
-        });
+        set({ user, profile: profile || null, isLoading: false });
       } else {
-        set({ user: null, roles: [], profile: null, isLoading: false });
+        set({ user: null, profile: null, isLoading: false });
       }
     } catch (error) {
       console.error('Error initializing auth:', error);
@@ -56,35 +50,46 @@ export const useAuth = create<AuthState>((set, get) => ({
   },
 
   signIn: async (email: string, password: string) => {
-    set({ isLoading: true });
     try {
-      const { error } = await supabase.auth.signInWithPassword({
-        email,
-        password,
-      });
-
+      set({ isLoading: true, error: null });
+      const { error } = await supabase.auth.signInWithPassword({ email, password });
       if (error) throw error;
       await get().initialize();
     } catch (error) {
-      console.error('Sign in error:', error);
+      set({ error: (error as Error).message });
       throw error;
     } finally {
       set({ isLoading: false });
     }
   },
 
-  signUp: async (email: string, password: string) => {
-    set({ isLoading: true });
+  signUp: async (email: string, password: string, role: UserRole) => {
     try {
-      const { error } = await supabase.auth.signUp({
+      set({ isLoading: true, error: null });
+      
+      const { data: { user }, error } = await supabase.auth.signUp({
         email,
         password,
+        options: {
+          data: { role }
+        }
       });
 
       if (error) throw error;
+      if (!user) throw new Error('User creation failed');
+
+      const { error: profileError } = await supabase
+        .from('user_profiles')
+        .insert([{
+          id: user.id,
+          role,
+          profile_data: {}
+        }]);
+
+      if (profileError) throw profileError;
       await get().initialize();
     } catch (error) {
-      console.error('Sign up error:', error);
+      set({ error: (error as Error).message });
       throw error;
     } finally {
       set({ isLoading: false });
@@ -92,47 +97,45 @@ export const useAuth = create<AuthState>((set, get) => ({
   },
 
   signOut: async () => {
-    set({ isLoading: true });
     try {
+      set({ isLoading: true, error: null });
       const { error } = await supabase.auth.signOut();
       if (error) throw error;
-      set({ user: null, roles: [], profile: null });
+      set({ user: null, profile: null });
     } catch (error) {
-      console.error('Sign out error:', error);
+      set({ error: (error as Error).message });
       throw error;
     } finally {
       set({ isLoading: false });
     }
   },
 
-  updateProfile: async (data) => {
+  updateProfile: async (data: Partial<Profile>) => {
     const user = get().user;
     if (!user) throw new Error('No user logged in');
 
-    set({ isLoading: true });
     try {
+      set({ isLoading: true, error: null });
+      
       const { error } = await supabase
-        .from('profiles')
+        .from('user_profiles')
         .update(data)
         .eq('id', user.id);
 
       if (error) throw error;
 
-      const currentProfile = get().profile;
-      set({ 
-        profile: { 
-          full_name: data.full_name ?? currentProfile?.full_name ?? null,
-          avatar_url: data.avatar_url ?? currentProfile?.avatar_url ?? null,
-          bio: data.bio ?? currentProfile?.bio ?? null
-        },
-        isLoading: false
-      });
+      const { data: updatedProfile } = await supabase
+        .from('user_profiles')
+        .select('*')
+        .eq('id', user.id)
+        .single();
+
+      set({ profile: updatedProfile, isLoading: false });
     } catch (error) {
-      console.error('Update profile error:', error);
-      set({ isLoading: false });
+      set({ error: (error as Error).message, isLoading: false });
       throw error;
     }
-  },
+  }
 }));
 
 // Initialize auth state when the app loads
